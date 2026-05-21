@@ -39,15 +39,15 @@ export default function PlexusSphere() {
         <shaderMaterial
           transparent={true}
           depthWrite={false}
-          blending={THREE.AdditiveBlending}
           fragmentShader={`
             void main() {
-              // Create a soft circle instead of a square pixel
               vec2 xy = gl_PointCoord.xy - vec2(0.5);
               float ll = length(xy);
               if(ll > 0.5) discard;
-              // Golden accent color matching reference
-              gl_FragColor = vec4(1.0, 0.7, 0.1, (0.5 - ll) * 2.0 * 0.8);
+
+              // Rich, solid gold/orange that won't wash out on white backgrounds
+              float alpha = (0.5 - ll) * 2.5;
+              gl_FragColor = vec4(0.9, 0.4, 0.0, alpha);
             }
           `}
           vertexShader={`

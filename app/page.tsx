@@ -61,7 +61,7 @@ const NAV_LINKS = [
 
 export default function Home() {
   return (
-    <main className="bg-transparent text-[#1a1a1a]">
+    <main className="w-full min-h-screen bg-transparent relative z-10 text-[#1a1a1a]">
 
       {/* ── Navbar ──────────────────────────────────────────────────────────── */}
       <nav className="fixed top-0 left-0 right-0 z-50 h-16 px-8 md:px-16
