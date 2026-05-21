@@ -1,65 +1,101 @@
 "use client";
+
 import { useRef, useMemo } from 'react';
-import { useFrame } from '@react-three/fiber';
-import * as THREE from 'three';
+import { useFrame }        from '@react-three/fiber';
+import * as THREE          from 'three';
 
 export default function PlexusSphere() {
-  const pointsRef = useRef<THREE.Points>(null);
+  const groupRef = useRef<THREE.Group>(null);
 
-  // Generate a dense, perfect sphere of particles
-  const particlesCount = 5000;
-  const positions = useMemo(() => {
-    const pos = new Float32Array(particlesCount * 3);
-    for (let i = 0; i < particlesCount; i++) {
+  // ── Build plexus geometry once on mount ──────────────────────────────────
+  const { pointPositions, linePositions } = useMemo(() => {
+    const POINT_COUNT = 350;
+    const RADIUS      = 2.5;
+    const MAX_DIST    = 0.8;
+
+    // 1. Generate 350 points uniformly on sphere surface
+    const pts: THREE.Vector3[] = [];
+    for (let i = 0; i < POINT_COUNT; i++) {
       const theta = Math.random() * Math.PI * 2;
-      const phi = Math.acos((Math.random() * 2) - 1);
-      const r = 2.5; // Radius
-      pos[i * 3] = r * Math.sin(phi) * Math.cos(theta);
-      pos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
-      pos[i * 3 + 2] = r * Math.cos(phi);
+      const phi   = Math.acos(2 * Math.random() - 1);
+      pts.push(new THREE.Vector3(
+        RADIUS * Math.sin(phi) * Math.cos(theta),
+        RADIUS * Math.sin(phi) * Math.sin(theta),
+        RADIUS * Math.cos(phi),
+      ));
     }
-    return pos;
-  }, [particlesCount]);
 
-  useFrame(({ clock }) => {
-    if (pointsRef.current) {
-      pointsRef.current.rotation.y = clock.getElapsedTime() * 0.05;
-      // Subtle breathing effect
-      const scale = 1 + Math.sin(clock.getElapsedTime() * 0.5) * 0.05;
-      pointsRef.current.scale.set(scale, scale, scale);
+    // 2. Point positions buffer
+    const pointPositions = new Float32Array(pts.length * 3);
+    pts.forEach((p, i) => {
+      pointPositions[i * 3]     = p.x;
+      pointPositions[i * 3 + 1] = p.y;
+      pointPositions[i * 3 + 2] = p.z;
+    });
+
+    // 3. Edge positions — O(n²) distance check, runs once (~61k iters ≈ 2ms)
+    const edgeVerts: number[] = [];
+    for (let i = 0; i < pts.length; i++) {
+      for (let j = i + 1; j < pts.length; j++) {
+        if (pts[i].distanceTo(pts[j]) < MAX_DIST) {
+          edgeVerts.push(pts[i].x, pts[i].y, pts[i].z);
+          edgeVerts.push(pts[j].x, pts[j].y, pts[j].z);
+        }
+      }
+    }
+    const linePositions = new Float32Array(edgeVerts);
+
+    return { pointPositions, linePositions };
+  }, []); // empty deps — calculated once on mount
+
+  // ── useFrame — rotation only, zero allocations ────────────────────────────
+  useFrame(() => {
+    if (groupRef.current) {
+      groupRef.current.rotation.y += 0.0015;
+      groupRef.current.rotation.x += 0.0005;
     }
   });
 
   return (
-    <group>
-      <points ref={pointsRef}>
-        <bufferGeometry>
-          <bufferAttribute attach="attributes-position" args={[positions, 3]} count={particlesCount} array={positions} itemSize={3} />
-        </bufferGeometry>
-        <shaderMaterial
-          transparent={true}
-          depthWrite={false}
-          fragmentShader={`
-            void main() {
-              vec2 xy = gl_PointCoord.xy - vec2(0.5);
-              float ll = length(xy);
-              if(ll > 0.5) discard;
+    <group ref={groupRef}>
 
-              // Rich, solid gold/orange that won't wash out on white backgrounds
-              float alpha = (0.5 - ll) * 2.5;
-              gl_FragColor = vec4(0.9, 0.4, 0.0, alpha);
-            }
-          `}
-          vertexShader={`
-            void main() {
-              vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-              // Size attenuation
-              gl_PointSize = 15.0 * (1.0 / -mvPosition.z);
-              gl_Position = projectionMatrix * mvPosition;
-            }
-          `}
+      {/* Glowing nodes */}
+      <points>
+        <bufferGeometry>
+          <bufferAttribute
+            attach="attributes-position"
+            args={[pointPositions, 3]}
+            array={pointPositions}
+            count={pointPositions.length / 3}
+            itemSize={3}
+          />
+        </bufferGeometry>
+        <pointsMaterial
+          color="#FF8C00"
+          size={0.05}
+          sizeAttenuation={true}
+          transparent={false}
         />
       </points>
+
+      {/* Interconnecting lines */}
+      <lineSegments>
+        <bufferGeometry>
+          <bufferAttribute
+            attach="attributes-position"
+            args={[linePositions, 3]}
+            array={linePositions}
+            count={linePositions.length / 3}
+            itemSize={3}
+          />
+        </bufferGeometry>
+        <lineBasicMaterial
+          color="#FF8C00"
+          transparent={true}
+          opacity={0.3}
+        />
+      </lineSegments>
+
     </group>
   );
 }

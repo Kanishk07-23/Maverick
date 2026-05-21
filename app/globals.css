@@ -1,85 +1,52 @@
 /* ─────────────────────────────────────────────────────────────────────────────
-   MAVERICK DIGITALS — Global Stylesheet (Tailwind v4 CSS-first)
-   Design System: Light-mode glassmorphism · GSAP-driven · Three.js canvas base
+   MAVERICK DIGITALS — Global Stylesheet
+   Design System: Light/Silver · Glassmorphism · Three.js canvas base
    ───────────────────────────────────────────────────────────────────────────── */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
 
 @import "tailwindcss";
 
-/* ─── Tailwind v4 Theme Extension (replaces tailwind.config.ts) ─────────────── */
+/* ─── Tailwind v4 Theme ──────────────────────────────────────────────────────── */
 @theme {
-  /* Fonts */
-  --font-sans:    var(--font-inter), 'Inter', system-ui, sans-serif;
-  --font-display: var(--font-outfit), 'Outfit', system-ui, sans-serif;
+  --font-sans:    'Inter', system-ui, sans-serif;
+  --font-display: 'Outfit', system-ui, sans-serif;
 
-  /* Brand Colors */
-  --color-brand-dark:     #1a1a1a;
-  --color-brand-gray:     #666666;
-  --color-brand-orange:   #FF8C00;
-  --color-brand-orange-alt: #FFaa00;
-  --color-brand-bg-from:  #EBEBEB;
-  --color-brand-bg-to:    #D4D4D4;
-
-  /* Box Shadows */
-  --shadow-glass-card:
-    0 8px 32px 0 rgba(31, 38, 135, 0.05),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.4);
-  --shadow-glass-card-hover:
-    0 16px 48px 0 rgba(31, 38, 135, 0.10),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.6);
-  --shadow-glass-nav:
-    0 4px 24px 0 rgba(0, 0, 0, 0.06),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.5);
-  --shadow-glow-orange:    0 0 20px 5px rgba(255, 140, 0, 0.3);
-  --shadow-glow-orange-sm: 0 0 10px 2px rgba(255, 165, 0, 0.6);
-
-  /* Animations */
-  --animate-fade-up:    fade-up 1.2s ease-out forwards;
-  --animate-float:      float 4s ease-in-out infinite;
-  --animate-spin-slow:  spin-slow 20s linear infinite;
-  --animate-pulse-glow: pulse-glow 2s ease-in-out infinite;
+  --color-brand-dark:   #1a1a1a;
+  --color-brand-orange: #FF8C00;
+  --color-brand-gray:   #666666;
 }
 
-/* Keyframes (must live outside @theme) */
-@keyframes fade-up {
-  0%   { opacity: 0; transform: translateY(40px); }
-  100% { opacity: 1; transform: translateY(0); }
+/* ─── Base Reset ─────────────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50%       { transform: translateY(-8px); }
+/* ─── Force Light Mode — no dark media query ─────────────────────────────────── */
+html {
+  color-scheme: light;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  scroll-behavior: auto;
 }
 
-@keyframes spin-slow {
-  0%   { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  /* Premium silver gradient — forced light, no dark override */
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  background-attachment: fixed;
+  color: #1a1a1a;
+  overflow-x: hidden;
+  min-height: 100vh;
 }
 
-@keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 20px 5px rgba(255,140,0,0.2); }
-  50%       { box-shadow: 0 0 30px 10px rgba(255,140,0,0.5); }
-}
-
-/* ─── 1. CSS Custom Properties (Design Tokens) ──────────────────────────────── */
-:root {
-  --color-bg-from:      #EBEBEB;
-  --color-bg-to:        #D4D4D4;
-  --glass-bg:           rgba(255, 255, 255, 0.25);
-  --glass-border:       rgba(255, 255, 255, 0.50);
-  --glass-shadow:       0 8px 32px 0 rgba(31, 38, 135, 0.05);
-  --glass-blur:         24px;
-  --nav-height:         80px;
-  --text-hero:          clamp(2.5rem, 5vw + 1rem, 5rem);
-  --text-section:       clamp(2rem, 3.5vw + 0.5rem, 3.5rem);
-  --ease-out-expo:      cubic-bezier(0.16, 1, 0.3, 1);
-  --z-canvas:           -1;
-  --z-content:          10;
-  --z-nav:              100;
-}
-
-/* ─── 2. Lenis Smooth Scroll Setup ──────────────────────────────────────────── */
+/* ─── Lenis Smooth Scroll ────────────────────────────────────────────────────── */
 html.lenis,
 html.lenis body {
   height: auto;
@@ -89,283 +56,21 @@ html.lenis body {
   scroll-behavior: auto !important;
 }
 
-.lenis.lenis-smooth [data-lenis-prevent] {
-  overscroll-behavior: contain;
-}
-
 .lenis.lenis-stopped {
   overflow: hidden;
 }
 
-/* ─── 3. Base Reset & Typography ─────────────────────────────────────────────── */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+/* ─── Scrollbar ──────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar        { width: 5px; }
+::-webkit-scrollbar-track  { background: #e8ecf1; }
+::-webkit-scrollbar-thumb  { background: rgba(150,160,180,0.5); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(150,160,180,0.8); }
 
-html {
-  font-size: 16px;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
-  scroll-behavior: auto;
-}
-
-body {
-  font-family: var(--font-inter), 'Inter', system-ui, sans-serif;
-  background: linear-gradient(180deg, #EBEBEB 0%, #D4D4D4 100%);
-  background-attachment: fixed;
-  color: #1a1a1a;
-  overflow-x: hidden;
-  min-height: 100vh;
-}
-
-/* ─── 4. Three.js Canvas Layer ───────────────────────────────────────────────── */
-#webgl-canvas {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  width: 100vw;
-  height: 100vh;
-}
-
-#webgl-canvas.interactive {
-  pointer-events: auto;
-}
-
-/* ─── 5. Main Content Shell ──────────────────────────────────────────────────── */
-#main-shell {
-  position: relative;
-  z-index: 10;
-  width: 100%;
-}
-
-/* ─── 6. Navigation ──────────────────────────────────────────────────────────── */
-.nav-glass {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 100;
-  height: var(--nav-height);
-  padding: 0 3rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: rgba(235, 235, 235, 0.7);
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
-  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
-  box-shadow:
-    0 4px 24px 0 rgba(0, 0, 0, 0.06),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.5);
-}
-
-.nav-active-indicator {
-  position: absolute;
-  bottom: -2px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 40px;
-  height: 1px;
-  background: #FF8C00;
-  box-shadow: 0 0 10px 2px rgba(255, 165, 0, 0.6);
-  border-radius: 999px;
-}
-
-/* ─── 7. Glassmorphism Card System ───────────────────────────────────────────── */
-.glass-card {
-  position: relative;
-  overflow: hidden;
-  border-radius: 1.5rem;
-  background: rgba(255, 255, 255, 0.30);
-  backdrop-filter: blur(64px);
-  -webkit-backdrop-filter: blur(64px);
-  box-shadow:
-    0 8px 32px 0 rgba(31, 38, 135, 0.05),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.50);
-  transition: all 500ms var(--ease-out-expo);
-}
-
-.glass-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.35) 0%,
-    rgba(255, 255, 255, 0.05) 100%
-  );
-  pointer-events: none;
-  z-index: 0;
-  border-radius: inherit;
-}
-
-.glass-card:hover {
-  box-shadow:
-    0 16px 48px 0 rgba(31, 38, 135, 0.10),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.6);
-  border-color: rgba(255, 255, 255, 0.70);
-  transform: translateY(-4px);
-}
-
-.glass-card > * {
-  position: relative;
-  z-index: 1;
-}
-
-/* ─── 8. Hero Section ────────────────────────────────────────────────────────── */
-.hero-section {
-  position: relative;
-  min-height: 100vh;
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  gap: 1.5rem;
-  align-items: center;
-  padding-top: var(--nav-height);
-  padding-left: 3rem;
-  padding-right: 3rem;
-}
-
-.hero-heading {
-  font-family: var(--font-outfit), 'Outfit', sans-serif;
-  font-size: var(--text-hero);
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  line-height: 1.05;
+/* ─── Selection & Focus ──────────────────────────────────────────────────────── */
+::selection {
+  background: rgba(255, 140, 0, 0.15);
   color: #1a1a1a;
 }
-
-.hero-sub {
-  font-size: 1.125rem;
-  line-height: 1.7;
-  color: #4A4A4A;
-  font-weight: 400;
-}
-
-/* ─── 9. Section Headings ────────────────────────────────────────────────────── */
-.section-heading {
-  font-family: var(--font-outfit), 'Outfit', sans-serif;
-  font-size: var(--text-section);
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  line-height: 1.1;
-  color: #1a1a1a;
-}
-
-/* ─── 10. Buttons ────────────────────────────────────────────────────────────── */
-.btn-primary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  background: #1a1a1a;
-  color: #ffffff;
-  border-radius: 9999px;
-  padding: 0.75rem 2rem;
-  font-weight: 500;
-  font-size: 0.9375rem;
-  letter-spacing: 0.02em;
-  border: 1px solid transparent;
-  cursor: pointer;
-  transition: all 300ms var(--ease-out-expo);
-  white-space: nowrap;
-}
-
-.btn-primary:hover {
-  background: #2d2d2d;
-  transform: translateY(-1px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-}
-
-.btn-primary:active { transform: translateY(0); }
-
-.btn-outline {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  background: transparent;
-  color: #1a1a1a;
-  border-radius: 9999px;
-  padding: 0.75rem 2rem;
-  font-weight: 500;
-  font-size: 0.9375rem;
-  letter-spacing: 0.02em;
-  border: 1px solid #1a1a1a;
-  cursor: pointer;
-  transition: all 300ms var(--ease-out-expo);
-  white-space: nowrap;
-}
-
-.btn-outline:hover {
-  background: rgba(26, 26, 26, 0.05);
-  transform: translateY(-1px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-}
-
-.btn-outline:active { transform: translateY(0); }
-
-/* ─── 11. Orange Accent / Glow Utilities ─────────────────────────────────────── */
-.orange-glow    { box-shadow: 0 0 20px 5px rgba(255, 140, 0, 0.3); }
-.orange-glow-sm { box-shadow: 0 0 10px 2px rgba(255, 165, 0, 0.6); }
-
-.text-orange-accent {
-  color: #FF8C00;
-  text-shadow: 0 0 20px rgba(255, 140, 0, 0.4);
-}
-
-/* ─── 12. GSAP Initial Hidden States ─────────────────────────────────────────── */
-[data-gsap-fade-up] {
-  opacity: 0;
-  transform: translateY(40px);
-  will-change: transform, opacity;
-}
-
-[data-gsap-fade-left] {
-  opacity: 0;
-  transform: translateX(-50px);
-  will-change: transform, opacity;
-}
-
-[data-gsap-scale-in] {
-  opacity: 0;
-  transform: scale(0.8);
-  will-change: transform, opacity;
-}
-
-[data-gsap-card] {
-  opacity: 0;
-  transform: translateY(100px);
-  will-change: transform, opacity;
-}
-
-/* ─── 13. Section Layout Helpers ────────────────────────────────────────────── */
-.section-wrapper {
-  position: relative;
-  width: 100%;
-  padding-left: 3rem;
-  padding-right: 3rem;
-}
-
-.section-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-/* ─── 14. Scrollbar ──────────────────────────────────────────────────────────── */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: #D4D4D4; }
-::-webkit-scrollbar-thumb { background: rgba(102,102,102,0.4); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(102,102,102,0.7); }
-
-/* ─── 15. Selection & Focus ─────────────────────────────────────────────────── */
-::selection { background: rgba(255,140,0,0.2); color: #1a1a1a; }
 
 :focus-visible {
   outline: 2px solid #FF8C00;
@@ -373,8 +78,15 @@ body {
   border-radius: 4px;
 }
 
-/* ─── 16. GPU layer helper ───────────────────────────────────────────────────── */
-.gpu-layer {
-  transform: translateZ(0);
-  backface-visibility: hidden;
+/* ─── GSAP initial hidden states ─────────────────────────────────────────────── */
+[data-gsap-fade-up] {
+  opacity: 0;
+  transform: translateY(40px);
+  will-change: transform, opacity;
+}
+
+[data-gsap-card] {
+  opacity: 0;
+  transform: translateY(60px);
+  will-change: transform, opacity;
 }
