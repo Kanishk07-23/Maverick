@@ -26,8 +26,10 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 import { SmoothScrollContext } from '@/lib/SmoothScrollContext'
 
-// Register ScrollTrigger once at module level — safe to call multiple times
-gsap.registerPlugin(ScrollTrigger)
+// Register ScrollTrigger safely on the client to avoid Next.js SSR crashes
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger)
+}
 
 interface SmoothScrollProps {
   children: React.ReactNode
