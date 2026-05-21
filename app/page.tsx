@@ -1,6 +1,5 @@
 'use client'
 
-// ── Service card data ─────────────────────────────────────────────────────────
 const SERVICES = [
   {
     id:          'personal-branding',
@@ -15,7 +14,7 @@ const SERVICES = [
     prismType:   'sphere',
     number:      '02',
     title:       'Social Media Management',
-    description: 'Strategic content ecosystems that grow your audience, deepen engagement, and convert followers into loyal customers.',
+    description: 'Strategic content ecosystems that grow your audience and convert followers into loyal customers.',
     tags:        ['Content', 'Growth', 'Community'],
   },
   {
@@ -52,150 +51,142 @@ const SERVICES = [
   },
 ] as const
 
-const NAV_LINKS = ['Home', 'Services', 'Work', 'About', 'Contact']
+const NAV_LINKS = [
+  { label: 'Home',     href: '#hero'     },
+  { label: 'Services', href: '#services' },
+  { label: 'Work',     href: '#work'     },
+  { label: 'About',    href: '#about'    },
+  { label: 'Contact',  href: '#contact'  },
+]
 
 export default function Home() {
   return (
-    <main className="bg-transparent">
+    <main className="bg-transparent text-[#1a1a1a]">
 
-      {/* ── Navigation ──────────────────────────────────────────────────────── */}
-      <nav
-        className="fixed top-0 left-0 right-0 z-50 h-20 px-8 md:px-16
-                   flex items-center justify-between
-                   bg-white/5 backdrop-blur-md border-b border-white/20"
-      >
-        {/* Logo */}
-        <a href="#hero" className="no-underline">
-          <span
-            className="text-lg font-black tracking-tighter text-[#1a1a1a]"
-            style={{ fontFamily: 'var(--font-outfit)' }}
-          >
-            MAVERICK DIGITALS
-          </span>
-        </a>
+      {/* ── Navbar ──────────────────────────────────────────────────────────── */}
+      <nav className="fixed top-0 left-0 right-0 z-50 h-16 px-8 md:px-16
+                      flex items-center justify-between
+                      bg-white/10 backdrop-blur-md border-b border-white/20">
+        <span
+          className="text-base font-black tracking-tighter text-[#1a1a1a]"
+          style={{ fontFamily: 'var(--font-outfit)' }}
+        >
+          MAVERICK DIGITALS
+        </span>
 
-        {/* Links */}
-        <ul className="hidden md:flex items-center gap-10 list-none m-0 p-0">
-          {NAV_LINKS.map((item) => (
-            <li key={item}>
+        <ul className="hidden md:flex items-center gap-8 list-none">
+          {NAV_LINKS.map(({ label, href }) => (
+            <li key={label}>
               <a
-                href={`#${item.toLowerCase()}`}
+                href={href}
                 className="text-[11px] font-medium tracking-widest uppercase
                            text-[#1a1a1a]/50 hover:text-[#1a1a1a]
                            transition-colors duration-200 no-underline"
               >
-                {item}
+                {label}
               </a>
             </li>
           ))}
         </ul>
 
-        {/* CTA */}
         <button
-          className="px-6 py-2.5 rounded-full bg-[#1a1a1a] text-white text-sm
-                     font-medium tracking-wide transition-all duration-200
-                     hover:bg-[#333] hover:-translate-y-px"
+          className="px-5 py-2 rounded-full bg-[#1a1a1a] text-white text-xs
+                     font-semibold tracking-wide hover:bg-[#333]
+                     transition-colors duration-200"
         >
           Get Started
         </button>
       </nav>
 
       {/* ── Hero ────────────────────────────────────────────────────────────── */}
-      <header
+      <section
         id="hero"
-        className="relative min-h-screen flex flex-col items-center justify-center
-                   pt-20 px-8 md:px-16 text-center"
+        className="min-h-screen w-full flex flex-col justify-center items-center relative pt-20"
       >
-        <div
-          data-gsap-fade-up
-          className="mb-6 inline-flex items-center gap-2 px-4 py-1.5 rounded-full
-                     border border-[#1a1a1a]/10 bg-white/10 backdrop-blur-sm"
-        >
-          <span className="w-1.5 h-1.5 rounded-full bg-[#1a1a1a]/40 inline-block" />
-          <span className="text-[11px] font-medium tracking-widest uppercase text-[#666666]">
-            Full-Service Digital Agency
-          </span>
-        </div>
+        <div className="flex flex-col items-center text-center px-4 max-w-5xl">
+          <div className="mb-6 inline-flex items-center gap-2 px-4 py-1.5 rounded-full
+                          border border-[#1a1a1a]/10 bg-white/10 backdrop-blur-sm">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#1a1a1a]/30 inline-block" />
+            <span className="text-[10px] font-semibold tracking-widest uppercase text-[#1a1a1a]/50">
+              Full-Service Digital Agency
+            </span>
+          </div>
 
-        <h1
-          data-gsap-fade-up
-          className="font-black leading-[1.0] tracking-tighter text-[#1a1a1a]
-                     text-[clamp(3rem,8vw,8rem)] max-w-5xl"
-          style={{ fontFamily: 'var(--font-outfit)' }}
-        >
-          GROWING SMARTER,
-          <br />
-          MOVING FASTER.
-        </h1>
-
-        <p
-          data-gsap-fade-up
-          className="mt-8 max-w-md text-base leading-relaxed text-[#666666] font-light"
-        >
-          We are a full-service digital agency engineering brand experiences
-          that cut through the noise — from strategy to execution.
-        </p>
-
-        <div data-gsap-fade-up className="mt-10 flex items-center gap-4">
-          <button
-            className="px-8 py-3.5 rounded-full bg-[#1a1a1a] text-white text-sm
-                       font-medium tracking-wide transition-all duration-200
-                       hover:bg-[#333] hover:-translate-y-px"
+          <h1
+            className="font-black leading-none tracking-tighter text-[#1a1a1a]
+                       text-[clamp(3rem,9vw,9rem)]"
+            style={{ fontFamily: 'var(--font-outfit)' }}
           >
-            Explore Services
-          </button>
-          <button
-            className="px-8 py-3.5 rounded-full border border-[#1a1a1a]/20
-                       text-[#1a1a1a] text-sm font-medium tracking-wide
-                       bg-white/10 backdrop-blur-sm transition-all duration-200
-                       hover:bg-white/20 hover:-translate-y-px"
-          >
-            Get In Touch
-          </button>
+            GROWING SMARTER,
+            <br />
+            MOVING FASTER.
+          </h1>
+
+          <p className="mt-8 max-w-md text-base leading-relaxed text-[#666666]">
+            We are a full-service digital agency engineering brand experiences
+            that cut through the noise — from strategy to execution.
+          </p>
+
+          <div className="mt-10 flex items-center gap-4 flex-wrap justify-center">
+            <a href="#services">
+              <button
+                className="px-8 py-3 rounded-full bg-[#1a1a1a] text-white text-sm
+                           font-medium tracking-wide hover:bg-[#333]
+                           transition-all duration-200 hover:-translate-y-px"
+              >
+                Explore Services
+              </button>
+            </a>
+            <a href="#contact">
+              <button
+                className="px-8 py-3 rounded-full border border-[#1a1a1a]/20
+                           text-[#1a1a1a] text-sm font-medium tracking-wide
+                           bg-white/10 backdrop-blur-sm hover:bg-white/20
+                           transition-all duration-200 hover:-translate-y-px"
+              >
+                Get In Touch
+              </button>
+            </a>
+          </div>
         </div>
 
         {/* Scroll indicator */}
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3">
-          <span className="text-[10px] tracking-[0.25em] uppercase text-[#1a1a1a]/30">
-            Scroll
-          </span>
+        <div className="absolute bottom-10 flex flex-col items-center gap-2">
+          <span className="text-[10px] tracking-[0.25em] uppercase text-[#1a1a1a]/30">Scroll</span>
           <div className="w-px h-10 bg-gradient-to-b from-[#1a1a1a]/20 to-transparent" />
         </div>
-      </header>
+      </section>
 
       {/* ── Services ────────────────────────────────────────────────────────── */}
       <section
         id="services"
-        className="relative min-h-screen w-full py-32 px-8 md:px-16"
+        className="min-h-screen w-full flex flex-col justify-center py-20 px-4 md:px-10
+                   border-t border-black/10"
       >
-        <div className="max-w-7xl mx-auto">
-
-          {/* Section label */}
-          <div className="flex items-center gap-4 mb-4">
-            <div className="w-6 h-px bg-[#1a1a1a]/30" />
-            <span className="text-[11px] font-medium tracking-widest uppercase text-[#666666]">
+        <div className="max-w-7xl mx-auto w-full">
+          {/* Header */}
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-5 h-px bg-[#1a1a1a]/30" />
+            <span className="text-[10px] font-semibold tracking-widest uppercase text-[#1a1a1a]/40">
               Services
             </span>
           </div>
-
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-20">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-14">
             <h2
-              data-gsap-fade-up
               className="text-[clamp(2rem,4vw,3.5rem)] font-black tracking-tighter
-                         text-[#1a1a1a] leading-tight max-w-lg"
+                         text-[#1a1a1a] leading-tight"
               style={{ fontFamily: 'var(--font-outfit)' }}
             >
-              Every Service is a
+              Every Service Is a
               <br />
               Growth System.
             </h2>
             <p className="max-w-xs text-sm leading-relaxed text-[#666666]">
-              Not one-time deliverables — engineered ecosystems built to
-              compound your returns over time.
+              Engineered ecosystems built to compound your returns — not one-time deliverables.
             </p>
           </div>
 
-          {/* 6-card grid */}
+          {/* 6-Card Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {SERVICES.map((service) => (
               <article
@@ -203,63 +194,49 @@ export default function Home() {
                 id={`card-${service.id}`}
                 data-gsap-card
                 data-prism-type={service.prismType}
-                className="relative overflow-hidden rounded-2xl p-8 flex flex-col gap-6
+                className="rounded-2xl p-6 flex flex-col
                            bg-white/10 backdrop-blur-lg border border-white/20
                            transition-all duration-300 hover:bg-white/20 group cursor-pointer"
               >
                 {/*
-                 * ── PRISM CONTAINER ─────────────────────────────────────────
-                 * Intentionally empty. Step 5 GSAP will translate the matching
-                 * CardPrism WebGL object into this DOM bounding box.
-                 * id and data-prism-type must match the CardPrism type in Scene.tsx
+                 * PRISM CONTAINER — intentionally empty.
+                 * Step 5 GSAP will position the matching CardPrism WebGL object
+                 * into this exact DOM bounding box.
                  */}
                 <div
-                  className="prism-container w-full h-48 rounded-xl
-                             bg-white/10 border border-white/20
-                             flex items-center justify-center relative overflow-hidden"
+                  className="prism-container w-full h-48 rounded-xl bg-white/5 mb-6"
                   id={`prism-${service.id}`}
                   data-prism-type={service.prismType}
                   aria-hidden="true"
-                >
-                  <span
-                    className="text-7xl font-black text-[#1a1a1a]/5 select-none"
+                />
+
+                <div className="flex items-start justify-between gap-2 mb-3">
+                  <h3
+                    className="text-base font-bold tracking-tight text-[#1a1a1a] leading-snug"
                     style={{ fontFamily: 'var(--font-outfit)' }}
                   >
+                    {service.title}
+                  </h3>
+                  <span className="text-[10px] font-bold text-[#1a1a1a]/30 tracking-widest shrink-0 mt-0.5">
                     {service.number}
                   </span>
                 </div>
 
-                {/* Card content */}
-                <div className="flex flex-col gap-3 flex-1">
-                  <div className="flex items-start justify-between gap-3">
-                    <h3
-                      className="text-lg font-bold tracking-tight text-[#1a1a1a] leading-snug"
-                      style={{ fontFamily: 'var(--font-outfit)' }}
+                <p className="text-sm leading-relaxed text-[#666666] flex-1 mb-4">
+                  {service.description}
+                </p>
+
+                <div className="flex flex-wrap gap-1.5">
+                  {service.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="text-[10px] font-medium tracking-wide px-2.5 py-1
+                                 rounded-full bg-[#1a1a1a]/5 text-[#1a1a1a]/40
+                                 border border-[#1a1a1a]/8"
                     >
-                      {service.title}
-                    </h3>
-                    <span className="text-[11px] font-bold text-[#666666] tracking-widest mt-0.5 shrink-0">
-                      {service.number}
+                      {tag}
                     </span>
-                  </div>
-
-                  <p className="text-sm leading-relaxed text-[#666666] flex-1">
-                    {service.description}
-                  </p>
-
-                  {/* Tags */}
-                  <div className="flex flex-wrap gap-2">
-                    {service.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="text-[10px] font-semibold tracking-wider px-3 py-1
-                                   rounded-full bg-[#1a1a1a]/5 text-[#1a1a1a]/40
-                                   border border-[#1a1a1a]/8"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
+                  ))}
                 </div>
               </article>
             ))}
@@ -267,100 +244,118 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── About ───────────────────────────────────────────────────────────── */}
-      <section id="about" className="relative w-full py-32 px-8 md:px-16">
-        <div className="max-w-7xl mx-auto">
-          <div
-            className="rounded-2xl p-12 md:p-20 bg-white/10 backdrop-blur-lg
-                       border border-white/20 flex flex-col md:flex-row
-                       items-center gap-16"
+      {/* ── Work ────────────────────────────────────────────────────────────── */}
+      <section
+        id="work"
+        className="min-h-[70vh] w-full flex items-center justify-center border-t border-black/10"
+      >
+        <div className="text-center px-4">
+          <div className="flex items-center justify-center gap-3 mb-6">
+            <div className="w-5 h-px bg-[#1a1a1a]/30" />
+            <span className="text-[10px] font-semibold tracking-widest uppercase text-[#1a1a1a]/40">Our Work</span>
+            <div className="w-5 h-px bg-[#1a1a1a]/30" />
+          </div>
+          <h2
+            className="text-[clamp(2rem,5vw,4.5rem)] font-black tracking-tighter text-[#1a1a1a] leading-tight mb-6"
+            style={{ fontFamily: 'var(--font-outfit)' }}
           >
-            <div className="flex-1">
-              <div className="flex items-center gap-4 mb-8">
-                <div className="w-6 h-px bg-[#1a1a1a]/30" />
-                <span className="text-[11px] font-medium tracking-widest uppercase text-[#666666]">
-                  Our Philosophy
-                </span>
-              </div>
-              <blockquote
-                className="text-3xl md:text-4xl font-black tracking-tight
-                           text-[#1a1a1a] leading-tight mb-8"
-                style={{ fontFamily: 'var(--font-outfit)' }}
-              >
-                "We don't just build brands. We architect growth engines that
-                compound over time."
-              </blockquote>
-              <p className="text-sm text-[#666666] leading-relaxed max-w-sm">
-                Maverick Digitals is a collective of strategists, designers,
-                engineers, and growth marketers obsessed with one thing —
-                building businesses that grow smarter and move faster.
-              </p>
-            </div>
+            Case Studies
+            <br />
+            Coming Soon.
+          </h2>
+          <p className="text-sm text-[#666666] max-w-sm mx-auto leading-relaxed">
+            We're curating our best work. Check back soon for in-depth case studies and results.
+          </p>
+        </div>
+      </section>
 
-            {/* Stats */}
-            <div className="grid grid-cols-2 gap-6 shrink-0">
-              {[
-                { value: '150+', label: 'Clients Served' },
-                { value: '8×',   label: 'Avg. ROI' },
-                { value: '98%',  label: 'Retention Rate' },
-                { value: '6yr',  label: 'Experience' },
-              ].map((s) => (
-                <div
-                  key={s.label}
-                  className="p-6 rounded-2xl bg-white/15 border border-white/20 text-center"
-                >
-                  <p
-                    className="text-4xl font-black tracking-tight text-[#1a1a1a]"
-                    style={{ fontFamily: 'var(--font-outfit)' }}
-                  >
-                    {s.value}
-                  </p>
-                  <p className="text-[10px] text-[#666666] tracking-widest uppercase mt-2 font-medium">
-                    {s.label}
-                  </p>
-                </div>
-              ))}
+      {/* ── About ───────────────────────────────────────────────────────────── */}
+      <section
+        id="about"
+        className="min-h-[70vh] w-full flex items-center justify-center border-t border-black/10 px-4 md:px-16"
+      >
+        <div className="max-w-4xl w-full grid md:grid-cols-2 gap-16 items-center">
+          <div>
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-5 h-px bg-[#1a1a1a]/30" />
+              <span className="text-[10px] font-semibold tracking-widest uppercase text-[#1a1a1a]/40">About</span>
             </div>
+            <h2
+              className="text-[clamp(2rem,4vw,3.5rem)] font-black tracking-tighter text-[#1a1a1a] leading-tight mb-6"
+              style={{ fontFamily: 'var(--font-outfit)' }}
+            >
+              We Architect
+              <br />
+              Growth Engines.
+            </h2>
+            <p className="text-sm text-[#666666] leading-relaxed">
+              Maverick Digitals is a collective of strategists, designers, engineers, and
+              growth marketers obsessed with one thing — building businesses that grow
+              smarter and move faster than the competition.
+            </p>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            {[
+              { value: '150+', label: 'Clients Served' },
+              { value: '8×',   label: 'Avg. ROI' },
+              { value: '98%',  label: 'Retention Rate' },
+              { value: '6yr',  label: 'Experience' },
+            ].map((s) => (
+              <div
+                key={s.label}
+                className="p-5 rounded-2xl bg-white/10 border border-white/20 text-center"
+              >
+                <p
+                  className="text-3xl font-black tracking-tight text-[#1a1a1a]"
+                  style={{ fontFamily: 'var(--font-outfit)' }}
+                >
+                  {s.value}
+                </p>
+                <p className="text-[10px] text-[#666666] tracking-widest uppercase mt-1.5 font-medium">
+                  {s.label}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* ── Contact CTA ─────────────────────────────────────────────────────── */}
-      <section id="contact" className="relative w-full py-32 px-8 md:px-16 text-center">
-        <div className="max-w-3xl mx-auto">
-          <div className="flex items-center justify-center gap-4 mb-6">
-            <div className="w-6 h-px bg-[#1a1a1a]/30" />
-            <span className="text-[11px] font-medium tracking-widest uppercase text-[#666666]">
-              Ready to Grow?
-            </span>
-            <div className="w-6 h-px bg-[#1a1a1a]/30" />
+      {/* ── Contact ─────────────────────────────────────────────────────────── */}
+      <section
+        id="contact"
+        className="min-h-[70vh] w-full flex items-center justify-center border-t border-black/10 px-4"
+      >
+        <div className="max-w-2xl text-center">
+          <div className="flex items-center justify-center gap-3 mb-6">
+            <div className="w-5 h-px bg-[#1a1a1a]/30" />
+            <span className="text-[10px] font-semibold tracking-widest uppercase text-[#1a1a1a]/40">Contact</span>
+            <div className="w-5 h-px bg-[#1a1a1a]/30" />
           </div>
           <h2
-            className="text-[clamp(2.5rem,5vw,5rem)] font-black tracking-tighter
-                       text-[#1a1a1a] leading-tight mb-8"
+            className="text-[clamp(2.5rem,5vw,5rem)] font-black tracking-tighter text-[#1a1a1a] leading-tight mb-6"
             style={{ fontFamily: 'var(--font-outfit)' }}
           >
             Let's Build Something
             <br />
             Extraordinary.
           </h2>
-          <p className="text-base text-[#666666] max-w-md mx-auto mb-12 leading-relaxed">
-            Book a free strategy session. We'll audit your current positioning
-            and map your path to category leadership.
+          <p className="text-sm text-[#666666] max-w-sm mx-auto mb-10 leading-relaxed">
+            Book a free strategy session. We'll audit your current positioning and
+            map your path to category leadership.
           </p>
           <div className="flex items-center justify-center gap-4 flex-wrap">
             <button
               className="px-10 py-4 rounded-full bg-[#1a1a1a] text-white text-sm
-                         font-medium tracking-wide transition-all duration-200
-                         hover:bg-[#333] hover:-translate-y-px"
+                         font-medium tracking-wide hover:bg-[#333]
+                         transition-all duration-200 hover:-translate-y-px"
             >
               Book a Free Strategy Call
             </button>
             <button
               className="px-10 py-4 rounded-full border border-[#1a1a1a]/20
                          text-[#1a1a1a] text-sm font-medium tracking-wide
-                         bg-white/10 backdrop-blur-sm transition-all duration-200
-                         hover:bg-white/20 hover:-translate-y-px"
+                         bg-white/10 backdrop-blur-sm hover:bg-white/20
+                         transition-all duration-200 hover:-translate-y-px"
             >
               View Our Work
             </button>
@@ -369,30 +364,28 @@ export default function Home() {
       </section>
 
       {/* ── Footer ──────────────────────────────────────────────────────────── */}
-      <footer className="relative w-full border-t border-[#1a1a1a]/10 py-10 px-8 md:px-16">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+      <footer className="w-full border-t border-black/10 py-8 px-8 md:px-16">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           <span
-            className="text-base font-black tracking-tighter text-[#1a1a1a]"
+            className="text-sm font-black tracking-tighter text-[#1a1a1a]"
             style={{ fontFamily: 'var(--font-outfit)' }}
           >
             MAVERICK DIGITALS
           </span>
-
-          <ul className="flex flex-wrap items-center gap-8 list-none">
-            {NAV_LINKS.map((item) => (
-              <li key={item}>
+          <ul className="flex flex-wrap items-center gap-6 list-none">
+            {NAV_LINKS.map(({ label, href }) => (
+              <li key={label}>
                 <a
-                  href={`#${item.toLowerCase()}`}
-                  className="text-[11px] tracking-widest uppercase text-[#1a1a1a]/40
+                  href={href}
+                  className="text-[10px] tracking-widest uppercase text-[#1a1a1a]/30
                              hover:text-[#1a1a1a] transition-colors duration-200 no-underline font-medium"
                 >
-                  {item}
+                  {label}
                 </a>
               </li>
             ))}
           </ul>
-
-          <p className="text-[11px] text-[#1a1a1a]/30 tracking-wide">
+          <p className="text-[10px] text-[#1a1a1a]/25 tracking-wide">
             © {new Date().getFullYear()} Maverick Digitals
           </p>
         </div>

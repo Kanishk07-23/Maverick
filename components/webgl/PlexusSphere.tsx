@@ -1,112 +1,65 @@
 "use client";
-
-import { useRef } from 'react';
+import { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
-// ── Module-level shader constants — never recreated on re-render ──────────────
-
-// Shared vertex shader: GPU-based organic breathing displacement via uTime
-const POINT_VERT = `
-  uniform float uTime;
-  void main() {
-    float displacement = sin(position.x * 2.0 + uTime) * cos(position.y * 2.0 + uTime) * 0.2;
-    vec3 newPosition = position + normal * displacement;
-    vec4 mvPosition = modelViewMatrix * vec4(newPosition, 1.0);
-    gl_PointSize = 12.0 * (1.0 / -mvPosition.z);
-    gl_Position = projectionMatrix * mvPosition;
-  }
-`;
-
-// Fragment: deep orange/gold radial glow for nodes
-const POINT_FRAG = `
-  void main() {
-    float d = distance(gl_PointCoord, vec2(0.5));
-    float strength = 0.05 / d - 0.1;
-    gl_FragColor = vec4(1.0, 0.4, 0.0, strength);
-  }
-`;
-
-// Wire vertex: same displacement so wireframe breathes in sync with points
-const WIRE_VERT = `
-  uniform float uTime;
-  void main() {
-    float displacement = sin(position.x * 2.0 + uTime) * cos(position.y * 2.0 + uTime) * 0.2;
-    vec3 newPosition = position + normal * displacement;
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(newPosition, 1.0);
-  }
-`;
-
-// Fragment: dark, near-invisible wireframe
-const WIRE_FRAG = `
-  void main() {
-    gl_FragColor = vec4(0.1, 0.1, 0.1, 0.12);
-  }
-`;
-
 export default function PlexusSphere() {
-  const groupRef    = useRef<THREE.Group>(null);
-  const pointMatRef = useRef<THREE.ShaderMaterial>(null);
-  const wireMatRef  = useRef<THREE.ShaderMaterial>(null);
+  const pointsRef = useRef<THREE.Points>(null);
 
-  // Update uTime on GPU every frame — zero allocations, zero state
+  // Generate a dense, perfect sphere of particles
+  const particlesCount = 5000;
+  const positions = useMemo(() => {
+    const pos = new Float32Array(particlesCount * 3);
+    for (let i = 0; i < particlesCount; i++) {
+      const theta = Math.random() * Math.PI * 2;
+      const phi = Math.acos((Math.random() * 2) - 1);
+      const r = 2.5; // Radius
+      pos[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+      pos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+      pos[i * 3 + 2] = r * Math.cos(phi);
+    }
+    return pos;
+  }, [particlesCount]);
+
   useFrame(({ clock }) => {
-    const t = clock.getElapsedTime();
-    if (pointMatRef.current) pointMatRef.current.uniforms.uTime.value = t;
-    if (wireMatRef.current)  wireMatRef.current.uniforms.uTime.value  = t;
-    if (groupRef.current) {
-      groupRef.current.rotation.y += 0.0015;
-      groupRef.current.rotation.x += 0.0005;
+    if (pointsRef.current) {
+      pointsRef.current.rotation.y = clock.getElapsedTime() * 0.05;
+      // Subtle breathing effect
+      const scale = 1 + Math.sin(clock.getElapsedTime() * 0.5) * 0.05;
+      pointsRef.current.scale.set(scale, scale, scale);
     }
   });
 
   return (
-    <group ref={groupRef}>
-
-      {/* Glowing breathing nodes */}
-      <points>
-        <icosahedronGeometry args={[2, 3]} />
+    <group>
+      <points ref={pointsRef}>
+        <bufferGeometry>
+          <bufferAttribute attach="attributes-position" args={[positions, 3]} count={particlesCount} array={positions} itemSize={3} />
+        </bufferGeometry>
         <shaderMaterial
-          ref={pointMatRef}
-          vertexShader={POINT_VERT}
-          fragmentShader={POINT_FRAG}
-          uniforms={{ uTime: { value: 0 } }}
           transparent={true}
           depthWrite={false}
           blending={THREE.AdditiveBlending}
+          fragmentShader={`
+            void main() {
+              // Create a soft circle instead of a square pixel
+              vec2 xy = gl_PointCoord.xy - vec2(0.5);
+              float ll = length(xy);
+              if(ll > 0.5) discard;
+              // Golden accent color matching reference
+              gl_FragColor = vec4(1.0, 0.7, 0.1, (0.5 - ll) * 2.0 * 0.8);
+            }
+          `}
+          vertexShader={`
+            void main() {
+              vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+              // Size attenuation
+              gl_PointSize = 15.0 * (1.0 / -mvPosition.z);
+              gl_Position = projectionMatrix * mvPosition;
+            }
+          `}
         />
       </points>
-
-      {/* Wireframe mesh — same displacement as points */}
-      <mesh>
-        <icosahedronGeometry args={[2, 3]} />
-        <shaderMaterial
-          ref={wireMatRef}
-          vertexShader={WIRE_VERT}
-          fragmentShader={WIRE_FRAG}
-          uniforms={{ uTime: { value: 0 } }}
-          wireframe={true}
-          transparent={true}
-          depthWrite={false}
-        />
-      </mesh>
-
-      {/* Concentric orbit rings — static, dark, low opacity */}
-      <mesh rotation={[Math.PI * 0.15, 0, 0]}>
-        <torusGeometry args={[2.5, 0.005, 16, 100]} />
-        <meshBasicMaterial color="#1a1a1a" opacity={0.10} transparent={true} />
-      </mesh>
-
-      <mesh rotation={[Math.PI * 0.35, Math.PI * 0.1, 0]}>
-        <torusGeometry args={[3.0, 0.005, 16, 100]} />
-        <meshBasicMaterial color="#1a1a1a" opacity={0.07} transparent={true} />
-      </mesh>
-
-      <mesh rotation={[Math.PI * 0.55, Math.PI * 0.2, 0]}>
-        <torusGeometry args={[3.5, 0.005, 16, 100]} />
-        <meshBasicMaterial color="#1a1a1a" opacity={0.04} transparent={true} />
-      </mesh>
-
     </group>
   );
 }
